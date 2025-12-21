@@ -1,0 +1,52 @@
+# Dependencies
+node_modules/
+.npm
+.yarn
+package-lock.json
+yarn.lock
+
+# Next.js & React Build Outputs
+.next/
+out/
+build/
+dist/
+.vercel
+.turbo
+
+# --- CRITICAL: Environment Variables ---
+# This ignores all local env files where secrets usually live
+.env
+*.local
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+# ---------------------------------------
+
+# Debug Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# IDE / Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*.sublime-project
+*.sublime-workspace
+
+# Operating System
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+ehthumbs.db
+
+# TypeScript
+*.tsbuildinfo
+
+# Large Assets/Uploads
+public/uploads/
+public/assets/large/*
