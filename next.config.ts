@@ -7,6 +7,15 @@ const nextConfig = {
       },
     ],
   },
+
+  // Mark handlebars as external for server bundles (Node.js runtime)
+  serverExternalPackages: ["handlebars"],
+
+  // Optional: If you want to fully embrace Turbopack and silence any related warnings
+  turbopack: {},
+};
+
+export default nextConfig;
   /**
    * Vercel/webpack complains about `require.extensions` used deep inside
    * `handlebars` (pulled in by Genkit -> dotprompt). We don't actually need
@@ -14,20 +23,4 @@ const nextConfig = {
    * Marking it as external avoids webpack parsing that file, which removes
    * the "require.extensions is not supported by webpack" error.
    */
-  webpack: (config: any) => {
-    if (!config.externals) {
-      config.externals = [];
-    }
-
-    // Ensure we can push into an array form of externals.
-    if (Array.isArray(config.externals)) {
-      config.externals.push({
-        handlebars: "commonjs handlebars",
-      });
-    }
-
-    return config;
-  },
-};
-
-export default nextConfig;
+  
