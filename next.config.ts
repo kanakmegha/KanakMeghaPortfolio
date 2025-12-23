@@ -23,4 +23,3 @@ export default nextConfig;
    * Marking it as external avoids webpack parsing that file, which removes
    * the "require.extensions is not supported by webpack" error.
    */
-  
