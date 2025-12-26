@@ -5,7 +5,7 @@ import { OpenAI } from "openai";
 import { EXPERIENCE } from "@/lib/data"; // Keep hardcoded experience
 
 const client = new OpenAI({
-  apiKey: process.env.HF_TOKEN_READ,
+  apiKey: process.env.HF_TOKEN,
   baseURL: "https://router.huggingface.co/v1",
 });
 
