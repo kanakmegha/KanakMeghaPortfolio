@@ -8,7 +8,7 @@
  * - GenerateAlternativeContentOutput - The return type for the generateAlternativeContent function.
  */
 
-import {ai} from '@/ai/genkit';
+import {ai} from '@/ai/init';
 import {z} from 'genkit';
 
 const GenerateAlternativeContentInputSchema = z.object({
@@ -58,7 +58,7 @@ const generateAlternativeContentFlow = ai.defineFlow(
     inputSchema: GenerateAlternativeContentInputSchema,
     outputSchema: GenerateAlternativeContentOutputSchema,
   },
-  async input => {
+  async (input: any) => {
     const {output} = await prompt(input);
     return output!;
   }
