@@ -1,101 +1,64 @@
-'use server';
+import { genkit, z } from 'genkit';
+import openAI from '@genkit-ai/compat-oai';
+import { PROJECTS, EXPERIENCE } from '@/lib/data';
 
-/**
- * @fileOverview A chatbot flow for Kanak's portfolio using a RAG-style approach.
- *
- * - portfolioChatbot - A function that answers questions about Kanak's portfolio.
- * - PortfolioChatbotInput - The input type for the portfolioChatbot function.
- * - PortfolioChatbotOutput - The return type for the portfolioChatbot function.
- */
+// 1. Initialize Genkit with the Hugging Face Router
+const ai = genkit({
+  plugins: [
+    openAI({
+      apiKey: process.env.HF_TOKEN, // Your Hugging Face Access Token
+      baseURL: "https://router.huggingface.co/v1", // HF OpenAI-compatible endpoint
+    }),
+  ],
+});
 
-import {ai} from '@/ai/genkit';
-import {z} from 'genkit';
-import {PROJECTS, EXPERIENCE} from '@/lib/data';
-import {generate} from 'genkit';
-
-// Combine all portfolio data into a single context document for the AI to reference.
+// 2. Map your data into a clear context block
 const portfolioContext = `
-# About Kanak - Portfolio Information
+RELEVANT PORTFOLIO DATA:
+---
+PROJECTS:
+${PROJECTS.map(p => `- ${p.title}: ${p.description}`).join('\n')}
 
-## Professional Summary
-A passionate engineer crafting intelligent solutions that bridge the gap between complex data and human-centric applications.
-
-## Work Experience
-${EXPERIENCE.map(
-  exp => `
-### Role: ${exp.role}
-- **Company**: ${exp.company}
-- **Dates**: ${exp.date}
-- **Summary**: ${exp.description}
-`
-).join('')}
-
-## Projects
-${PROJECTS.map(
-  proj => `
-### Project: ${proj.title}
-- **Description**: ${proj.description}
-- **Technologies Used**: ${proj.tags.join(', ')}
-- **Link**: ${proj.link}
-`
-).join('')}
+EXPERIENCE:
+${EXPERIENCE.map(e => `- ${e.company} (${e.role}): ${e.description}`).join('\n')}
+---
 `;
 
-const PortfolioChatbotInputSchema = z.object({
-  question: z.string().describe('The question from the user.'),
-  history: z
-    .array(
-      z.object({
-        role: z.enum(['user', 'model']),
-        content: z.string(),
-      })
-    )
-    .optional()
-    .describe('The conversation history.'),
+// 3. Define the Input Schema (required for your import in actions.ts)
+export const PortfolioChatbotInputSchema = z.object({
+  message: z.string(),
 });
+
 export type PortfolioChatbotInput = z.infer<typeof PortfolioChatbotInputSchema>;
 
-const PortfolioChatbotOutputSchema = z.string().describe("The AI's response.");
-export type PortfolioChatbotOutput = z.infer<
-  typeof PortfolioChatbotOutputSchema
->;
-
-export async function portfolioChatbot(
-  input: PortfolioChatbotInput
-): Promise<PortfolioChatbotOutput> {
-  return portfolioChatbotFlow(input);
-}
-
-// System prompt instructing the AI on how to behave.
-// It's given the context and instructed to *only* use that information.
-const systemPrompt = `You are a friendly and professional AI assistant for Kanak's portfolio. Your name is "Kanak's AI Assistant".
-
-Your purpose is to answer questions from potential employers, recruiters, or colleagues about Kanak's skills, work experience, and projects.
-
-You have been provided with Kanak's portfolio information. You MUST base your answers ONLY on this information. Do not invent details or use any external knowledge.
-
-If a question cannot be answered from the provided text, you should politely say, "I'm sorry, I don't have information on that topic. My knowledge is limited to what's in Kanak's portfolio."
-
-Keep your answers conversational, concise, and helpful. Always maintain a positive and professional tone.
-`;
-
-const portfolioChatbotFlow = ai.defineFlow(
+// 4. Define and EXPORT the flow
+// The name "portfolioChatbot" MUST match your import in actions.ts
+export const portfolioChatbot = ai.defineFlow(
   {
-    name: 'portfolioChatbotFlow',
+    name: 'portfolioChatbot',
     inputSchema: PortfolioChatbotInputSchema,
-    outputSchema: PortfolioChatbotOutputSchema,
+    outputSchema: z.string(),
   },
-  async input => {
-    const { history, question } = input;
-    
-    const llmResponse = await generate({
-        model: 'gemini-2.0-flash',
-        system: systemPrompt,
-        prompt: `Here is the portfolio information you must use:\n\n---\n\n${portfolioContext}\n\n---\n\nNow, please answer the user's question based on the conversation history and the new question.\n\nQuestion: ${question}`,
-        history: history
+  async (input) => {
+    const response = await ai.generate({
+      // Reference the GPT-OSS 120B model via a provider like Fireworks or Cerebras
+      model: 'openai/gpt-oss-120b:auto', 
+      prompt: `
+        You are a professional AI representative for this developer. 
+        Answer the following question using ONLY the provided context.
+        If the information is not present, say you don't know and invite them to reach out via email.
+
+        CONTEXT:
+        ${portfolioContext}
+
+        USER QUESTION: ${input.message}
+      `,
+      config: {
+        temperature: 0.7,
+        maxTokens: 500,
+      },
     });
 
-    const output = llmResponse.text();
-    return output || "I'm sorry, I couldn't generate a response. Please try again.";
+    return response.text;
   }
 );
