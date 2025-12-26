@@ -52,3 +52,42 @@ ehthumbs.db
 # Large Assets/Uploads
 public/uploads/
 public/assets/large/*
+# --- Dependencies ---
+node_modules/
+.pnp
+.pnp.js
+
+# --- Next.js ---
+.next/
+out/
+build/
+next-env.d.ts
+
+# --- Genkit (Critical to ignore) ---
+.genkit/
+genkit.log
+genkit-state.json
+
+# --- Environment & Secrets (SECURITY RISK) ---
+.env
+.env.local
+.env.production
+.env.development.local
+*.pem
+
+# --- Debug & Logs ---
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# --- OS & IDE Metadata ---
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

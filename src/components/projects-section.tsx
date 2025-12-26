@@ -1,9 +1,9 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { ShowMoreWrapper } from "./show-more-wrapper";
+import React from "react";
 
 // 1. ADDED BACK THE REPO TYPE DEFINITION
 type Repo = {

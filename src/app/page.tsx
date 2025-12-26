@@ -5,6 +5,7 @@ import { ToolsDemoSection } from "@/components/tools-demo-section";
 import { ExperienceTimeline } from "@/components/experience-timeline";
 import { ContactSection } from "@/components/contact-section";
 import { ClientHydrationWrapper } from "@/components/ClientHydrationWrapper";
+import React from 'react';
 
 export default function Home() {
   return (
