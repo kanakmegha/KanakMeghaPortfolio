@@ -4,7 +4,9 @@ node_modules/
 .yarn
 package-lock.json
 yarn.lock
-
+# Genkit
+.genkit/
+genkit.log
 # Next.js & React Build Outputs
 .next/
 out/
