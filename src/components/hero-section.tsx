@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { RotatingGlobe } from "./rotating-globe";
-import { ChatbotDialog } from "./chatbot-dialog";
+import  ChatbotDialog  from "./chatbot-dialog";
 
 export function HeroSection() {
   const [headline, setHeadline] = useState("Innovating at the Intersection of AI and Engineering");
@@ -29,7 +29,7 @@ export function HeroSection() {
                   Get in Touch <ArrowRight className="ml-2 h-5 w-5" />
                 </a>
               </Button>
-              <ChatbotDialog />
+              <ChatbotDialog liveProjects={[]} />
             </div>
           </div>
           <div className="flex items-center justify-center">

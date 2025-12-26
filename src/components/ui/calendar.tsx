@@ -48,9 +48,12 @@ function Calendar({
         day_hidden: "invisible",
         ...classNames,
       }}
+      // Inside your Calendar component, replace the existing 'components' prop:
       components={{
-        IconLeft: ({ ...props }) => <ChevronLeft className="h-4 w-4" />,
-        IconRight: ({ ...props }) => <ChevronRight className="h-4 w-4" />,
+      Chevron: ({ orientation }) => {
+        const Icon = orientation === "left" ? ChevronLeft : ChevronRight;
+          return <Icon className="h-4 w-4" />;
+        },
       }}
       {...props}
     />
