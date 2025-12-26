@@ -1,47 +1,41 @@
+// src/app/actions.ts
 'use server'
 
 import { OpenAI } from "openai";
+import { EXPERIENCE } from "@/lib/data"; // Keep hardcoded experience
 
-// 1. Initialize OpenAI client (matches your Python logic)
 const client = new OpenAI({
+  apiKey: process.env.HF_TOKEN_READ,
   baseURL: "https://router.huggingface.co/v1",
-  apiKey: process.env.HF_TOKEN, 
 });
 
-// --- CHATBOT ACTION ---
+export async function askChatbot(message: string, liveProjects: any[]) {
+  try{
+  const response = await client.chat.completions.create({
+    model: "openai/gpt-oss-120b:fireworks-ai",
+    messages: [
+      { 
+        role: "system", 
+        content: `You are Kanak's cheerful, enthusiastic AI storyteller! 
+        
+        CONTEXT FROM PAGE:
+        - LIVE PROJECTS: ${JSON.stringify(liveProjects)}
+        - EXPERIENCE: ${JSON.stringify(EXPERIENCE)}
 
-export type PortfolioChatbotInput = {
-  message: string;
-};
+        YOUR STYLE:
+        - Be a storyteller. If someone asks about a project, look at the description and tech tags provided in the context above and weave a passionate story about it.
+        - Use "I" (e.g., "I developed this to solve...").
+        - Be high-energy! Use words like "Amazing," "Thrilled," and "Adventure."` 
+      },
+      { role: "user", content: message }
+    ],
+    temperature: 0.85,
+  });
 
-export async function askChatbot(input: PortfolioChatbotInput) {
-  try {
-    // Matches your working Python model and parameters
-    const response = await client.chat.completions.create({
-      model: "openai/gpt-oss-120b:fireworks-ai",
-      messages: [
-        { 
-          role: "system", 
-          content: "You are Kanak's helpful assistant with high reasoning effort. Answer questions about their portfolio, skills in Next.js, and projects like QuickRead." 
-        },
-        { role: "user", content: input.message }
-      ],
-      max_tokens: 512,
-      temperature: 0.7
-    });
+  return response.choices[0].message.content;
 
-    const text = response.choices[0].message.content;
-
-    return { 
-      success: true, 
-      data: text || "I couldn't generate a response." 
-    };
-  } catch (error: any) {
-    console.error("Chatbot Action Error:", error);
-    return { 
-      success: false, 
-      error: error.message || "Failed to get response from AI." 
-    };
+  } catch (error) {
+    return { success: false, error: "Oh no! My circuits are a bit tired. Try again?" };
   }
 }
 
@@ -55,15 +49,15 @@ export type ContactFormData = {
 
 export async function sendContactEmail(data: ContactFormData) {
   try {
-    // This matches the export expected by your ContactSection component
-    console.log("Received contact form data:", data);
+    // This logs the data to your terminal for now
+    console.log("New Contact Form Submission:", data);
     
-    // Simulating a delay for the email sending process
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    // Simulate network delay
+    await new Promise((resolve) => setTimeout(resolve, 800));
     
-    return { success: true, message: "Email sent successfully!" };
+    return { success: true, message: "Thanks for reaching out! Kanak will get back to you soon." };
   } catch (error) {
     console.error("Email Error:", error);
-    return { success: false, error: "Failed to send email." };
+    return { success: false, error: "Something went wrong. Please try emailing Kanak directly." };
   }
 }

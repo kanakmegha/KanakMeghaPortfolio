@@ -5,8 +5,8 @@ import { ArrowUpRight } from "lucide-react";
 import { ShowMoreWrapper } from "./show-more-wrapper";
 import React from "react";
 
-// 1. ADDED BACK THE REPO TYPE DEFINITION
-type Repo = {
+// 1. EXPORTED TYPE FOR GLOBAL USE
+export type Repo = {
   name: string;
   description: string;
   html_url: string;
@@ -21,14 +21,14 @@ type Repo = {
   pushed_at: string;
 };
 
-// 2. ENSURE EXPLICIT RETURN TYPE Promise<Repo[]>
-async function fetchPublicRepos(): Promise<Repo[]> {
+// 2. EXPORTED FETCH FUNCTION (Allows Home Page to fetch this for the AI)
+export async function fetchPublicRepos(): Promise<Repo[]> {
   const username = process.env.GITHUB_USERNAME;
   const token = process.env.GITHUB_TOKEN;
 
   if (!username) {
     console.warn("⚠️ GITHUB_USERNAME is missing");
-    return []; // Returns empty array instead of void
+    return []; 
   }
 
   try {
@@ -43,7 +43,6 @@ async function fetchPublicRepos(): Promise<Repo[]> {
     if (!res.ok) return [];
 
     const repos = await res.json();
-    // Filter out forks and map to our Repo type
     return repos
       .filter((repo: any) => !repo.fork)
       .map((repo: any) => ({
@@ -59,14 +58,15 @@ async function fetchPublicRepos(): Promise<Repo[]> {
       }));
   } catch (error) {
     console.error(error);
-    return []; // Returns empty array on error
+    return []; 
   }
 }
 
-export default async function ProjectsSection() {
-  const allProjects = await fetchPublicRepos();
+// 3. UPDATED COMPONENT (Accepts optional 'initialData')
+export default async function ProjectsSection({ initialData }: { initialData?: Repo[] }) {
+  // If data is passed from Page.tsx, use it. Otherwise, fetch it normally.
+  const allProjects = initialData || await fetchPublicRepos();
   
-  // These now work because allProjects is recognized as an Array, not void
   const initialProjects = allProjects.slice(0, 6);
   const remainingProjects = allProjects.slice(6);
 
@@ -93,7 +93,7 @@ export default async function ProjectsSection() {
   );
 }
 
-// 3. Helper Component using the Repo type
+// 4. Helper Component
 function ProjectsGrid({ projects }: { projects: Repo[] }) {
   return (
     <div className="mx-auto grid max-w-5xl items-start gap-8 sm:grid-cols-2 lg:grid-cols-3">
@@ -112,7 +112,10 @@ function ProjectsGrid({ projects }: { projects: Repo[] }) {
               )}
             </div>
             <CardHeader>
-              <CardTitle>{project.name}</CardTitle>
+              <CardTitle className="flex items-center justify-between">
+                {project.name.replace(/-/g, ' ')}
+                <ArrowUpRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+              </CardTitle>
               <CardDescription className="line-clamp-2">{project.description}</CardDescription>
             </CardHeader>
           </Link>

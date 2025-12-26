@@ -64,7 +64,12 @@ export const EXPERIENCE = [
         company: "Unikul Solutions Pvt Ltd.",
         role: "Software Developer",
         date: "Aug 2024 - Present",
-        description: "ERP Development & Customization: Build and customize ERP solutions using Microsoft Dynamics 365 Business Central, tailoring workflows to client requirements. Business Intelligence: Co-assisted in developing Power BI dashboards to transform raw business data into interactive, insightful reports. Automation: Designed and implemented Python scripts to automate repetitive manual tasks, improving efficiency and reducing errors. Leadership & Mentorship: Mentored a junior colleague to help them learn and grow in technical tasks. Managed a team, coordinated efforts, and ensured projects were delivered on time and within deadlines."
+        description: " Assisted in developing and testing web-based modules using Python and RESTful APIs.\
+        Contributed to backend–database integration for analytics dashboards and data reporting.\
+        Built and optimized API endpoints for smooth data retrieval and transformation.\
+        Participated in debugging, version control (Git), and deployment automation\
+        (CI/CD pipelines). Collaborated with cross-functional teams to enhance system performance and scalability.\
+        Automations: Designed and implemented Python scripts to automate repetitive manual tasks, improving efficiency and reducing errors. Leadership & Mentorship: Mentored a junior colleague to help them learn and grow in technical tasks. Managed a team, coordinated efforts, and ensured projects were delivered on time and within deadlines."
     },
     {
         company: "Nexus Info",

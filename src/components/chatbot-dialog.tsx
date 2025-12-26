@@ -1,83 +1,54 @@
-"use client";
+"use client"
 
-import { useState, useRef, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-} from '@/components/ui/dialog';
-import { Loader2, Send, Sparkles } from 'lucide-react';
-import { askChatbot } from '@/app/actions';
-import { useToast } from '@/hooks/use-toast';
+import * as React from "react"
+import { Send, Bot, X, MessageCircle } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { askChatbot } from "@/app/actions"
+import { Repo } from "./projects-section"
+import { cn } from "@/lib/utils"
 
-type Message = {
-  role: 'user' | 'model';
-  content: string;
-};
+export default function ChatbotDialog({ liveProjects }: { liveProjects: Repo[] }) {
+  const [isOpen, setIsOpen] = React.useState(false)
+  const [input, setInput] = React.useState("")
+  const [messages, setMessages] = React.useState<{ role: "user" | "assistant"; content: string }[]>([
+    { role: "assistant", content: "Hi! I'm Kanak's AI assistant. Ask me anything about my projects or experience! ✨" }
+  ])
+  const [isLoading, setIsLoading] = React.useState(false)
+  const scrollRef = React.useRef<HTMLDivElement>(null)
 
-export function ChatbotDialog() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [input, setInput] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const { toast } = useToast();
-  const scrollAreaRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (scrollAreaRef.current) {
-        const viewport = scrollAreaRef.current.querySelector('div[data-radix-scroll-area-viewport]');
-        if(viewport) {
-            viewport.scrollTop = viewport.scrollHeight;
-        }
+  // Auto-scroll to bottom
+  React.useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight
     }
-  }, [messages, isLoading]);
+  }, [messages])
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
+  const handleSendMessage = async () => {
     if (!input.trim() || isLoading) return;
-
-    const userMessage: Message = { role: 'user', content: input };
-    setMessages((prev) => [...prev, userMessage]);
-    
-    const currentInput = input;
-    setInput('');
+  
+    const userMessage = input.trim();
+    setInput("");
+    setMessages((prev) => [...prev, { role: "user", content: userMessage }]);
     setIsLoading(true);
-
+  
     try {
-      const result = await askChatbot({
-        message: currentInput,
-      });
-
-      // Type Guard: Check if the returned object has the success property
-      if (typeof result === 'object' && 'success' in result && result.success) {
-        const modelMessage: Message = { 
-          role: 'model', 
-          content: result.data as string // Tell TS result.data is the string we need
-        };
-        setMessages((prev) => [...prev, modelMessage]);
-      } else {
-        // Handle the error case from the object
-        const errorMessage = (typeof result === 'object' && 'error' in result) 
-          ? result.error 
-          : "An unknown error occurred";
-        throw new Error(errorMessage as string);
+      const result = await askChatbot(userMessage, liveProjects);
+  
+      // Type Guard: Check if result is an object and has success property
+      if (typeof result === "object" && result !== null && "success" in result) {
+        if (result.success && "data" in result) {
+          setMessages((prev) => [...prev, { role: "assistant", content: result.data as string }]);
+        } else if ("error" in result) {
+          setMessages((prev) => [...prev, { role: "assistant", content: result.error as string }]);
+        }
+      } else if (typeof result === "string") {
+        // Handle the case where the action might return just a string
+        setMessages((prev) => [...prev, { role: "assistant", content: result }]);
       }
-      
-    } catch (error: any) {
-      console.error("Chatbot submission error:", error);
-      toast({
-        variant: 'destructive',
-        title: 'Connection Error',
-        description: error.message || 'The AI assistant is temporarily unavailable.',
-      });
-      setInput(currentInput); 
+    } catch (error) {
+      setMessages((prev) => [...prev, { role: "assistant", content: "Oops! My storytelling gears got stuck." }]);
     } finally {
       setIsLoading(false);
     }
@@ -85,81 +56,66 @@ export function ChatbotDialog() {
 
   return (
     <>
-      <Button variant="outline" size="lg" onClick={() => setIsOpen(true)}>
-        <Sparkles className="mr-2 h-5 w-5" />
-        Chat with my AI Assistant
+      <Button
+        onClick={() => setIsOpen(true)}
+        className={cn(
+          "fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-2xl transition-all hover:scale-110",
+          isOpen && "scale-0 opacity-0"
+        )}
+      >
+        <MessageCircle className="h-6 w-6" />
       </Button>
 
-      <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent className="sm:max-w-[425px] md:max-w-[600px] flex flex-col h-[70vh]">
-          <DialogHeader>
-            <DialogTitle>AI Portfolio Assistant</DialogTitle>
-            <DialogDescription>
-              Powered by GPT-OSS-120B. Ask me about Kanak's background and projects.
-            </DialogDescription>
-          </DialogHeader>
+      {isOpen && (
+        <Card className="fixed bottom-6 right-6 z-50 flex h-[500px] w-[350px] flex-col shadow-2xl animate-in slide-in-from-bottom-5">
+          <CardHeader className="flex flex-row items-center justify-between border-b p-4">
+            <CardTitle className="flex items-center gap-2 text-lg">
+              <Bot className="h-5 w-5 text-primary" />
+              Kanak's AI
+            </CardTitle>
+            <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)} className="h-8 w-8">
+              <X className="h-4 w-4" />
+            </Button>
+          </CardHeader>
 
-          <ScrollArea className="flex-1 p-4 border rounded-lg bg-muted/20" ref={scrollAreaRef}>
-            <div className="space-y-4">
-              {messages.length === 0 && (
-                <div className="text-center text-sm text-muted-foreground p-8">
-                  <p className="font-medium">Hi! I'm Kanak's virtual twin.</p>
-                  <p className="mt-2 text-xs">Try asking:</p>
-                  <ul className="list-none space-y-1 mt-2">
-                    <li>• "Tell me about your experience with Next.js"</li>
-                    <li>• "What projects have you worked on?"</li>
-                    <li>• "Are you available for freelance work?"</li>
-                  </ul>
-                </div>
-              )}
-              
-              {messages.map((message, index) => (
+          <CardContent ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-4">
+            {messages.map((msg, i) => (
+              <div key={i} className={cn("flex", msg.role === "user" ? "justify-end" : "justify-start")}>
                 <div
-                  key={index}
-                  className={`flex items-end gap-2 ${
-                    message.role === 'user' ? 'justify-end' : 'justify-start'
-                  }`}
+                  className={cn(
+                    "max-w-[85%] rounded-2xl px-4 py-2 text-sm",
+                    msg.role === "user" ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"
+                  )}
                 >
-                  <div
-                    className={`max-w-[85%] rounded-2xl px-4 py-2 text-sm ${
-                      message.role === 'user'
-                        ? 'bg-primary text-primary-foreground rounded-br-none'
-                        : 'bg-secondary text-secondary-foreground rounded-bl-none'
-                    }`}
-                  >
-                    <p className="leading-relaxed">{message.content}</p>
-                  </div>
+                  {msg.content}
                 </div>
-              ))}
-              
-              {isLoading && (
-                 <div className="flex justify-start items-end gap-2">
-                    <div className="max-w-[75%] rounded-2xl px-4 py-3 bg-secondary animate-pulse">
-                        <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
-                    </div>
-                </div>
-              )}
-            </div>
-          </ScrollArea>
+              </div>
+            ))}
+            {isLoading && (
+              <div className="flex justify-start">
+                <div className="bg-muted animate-pulse rounded-2xl px-4 py-2 text-sm">Typing...</div>
+              </div>
+            )}
+          </CardContent>
 
-          <DialogFooter className="mt-4">
-            <form onSubmit={handleSubmit} className="flex w-full items-center space-x-2">
+          <CardFooter className="border-t p-4">
+            <form
+              onSubmit={(e) => { e.preventDefault(); handleSendMessage(); }}
+              className="flex w-full items-center gap-2"
+            >
               <Input
+                placeholder="Ask about a project..."
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="Type your question..."
-                autoComplete="off"
-                disabled={isLoading}
                 className="flex-1"
               />
-              <Button type="submit" size="icon" disabled={isLoading || !input.trim()}>
+              <Button type="submit" size="icon" disabled={isLoading}>
                 <Send className="h-4 w-4" />
-                <span className="sr-only">Send</span>
               </Button>
             </form>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+          </CardFooter>
+        </Card>
+      )}
     </>
-  );
+  )
 }
