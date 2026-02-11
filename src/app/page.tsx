@@ -8,12 +8,17 @@ import { ClientHydrationWrapper } from "@/components/ClientHydrationWrapper";
 import ChatbotDialog from "@/components/chatbot-dialog";
 import React from 'react';
 import { Analytics } from "@vercel/analytics/react";
-
-
+import type { Metadata } from "next";
+export const metadata: Metadata = { // Add the : Metadata type here
+  title: "Kanak Megha | AI Software Developer Portfolio",
+  description: "Portfolio of Kanak Megha, a Software Developer specializing in Machine Learning, Deep Learning, and AI-driven web applications.",
+  keywords: ["Kanak Megha", "AI Developer", "Machine Learning Engineer", "Next.js Portfolio", "Llama3 Chatbot"],
+};
 export default async function Home() {
   const allProjects = await fetchPublicRepos();
 
   return (
+    
     <div className="flex min-h-screen flex-col">
       <Header />
       <main className="flex-1">
