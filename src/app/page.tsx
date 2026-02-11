@@ -7,6 +7,8 @@ import { ContactSection } from "@/components/contact-section"; // Named import m
 import { ClientHydrationWrapper } from "@/components/ClientHydrationWrapper";
 import ChatbotDialog from "@/components/chatbot-dialog";
 import React from 'react';
+import { Analytics } from "@vercel/analytics/react";
+
 
 export default async function Home() {
   const allProjects = await fetchPublicRepos();
@@ -29,6 +31,7 @@ export default async function Home() {
       </main>
 
       <ChatbotDialog liveProjects={allProjects} />
+      <Analytics />
     </div>
   );
 }
