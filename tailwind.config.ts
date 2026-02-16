@@ -20,10 +20,16 @@ export default {
         body: ['var(--font-poppins)', 'sans-serif'],
         headline: ['var(--font-poppins)', 'sans-serif'],
         code: ['monospace'],
+        blackletter: ['var(--font-blackletter)', 'serif'],
+        'serif-newspaper': ['var(--font-serif)', 'serif'],
+        'sans-newspaper': ['var(--font-inter)', 'sans-serif'],
       },
       colors: {
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
+        'news-bg': '#FDFBF7',
+        'news-ink': '#2C2C2C',
+        'news-accent': '#B22222',
         card: {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',

@@ -71,3 +71,38 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  .grain-bg::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0.05;
+    z-index: 50;
+    background-image: url("https://www.transparenttextures.com/patterns/paper.png");
+  }
+
+  .drop-cap::first-letter {
+    @apply font-blackletter text-6xl float-left mr-3 mt-1 leading-none;
+  }
+
+  .border-double-black {
+    border-bottom: 4px double #2c2c2c;
+  }
+
+  .newspaper-grid-col {
+    @apply border-l border-news-ink pl-6 first:border-l-0 first:pl-0;
+  }
+
+  .highlighter-hover {
+    @apply transition-colors duration-300;
+  }
+
+  .highlighter-hover:hover {
+    background-color: rgba(255, 255, 0, 0.4);
+  }
+}

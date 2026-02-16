@@ -10,6 +10,24 @@ const fontPoppins = Poppins({
   variable: '--font-poppins',
 });
 
+import { UnifrakturMaguntia, Playfair_Display, Inter } from 'next/font/google';
+
+const fontBlackletter = UnifrakturMaguntia({
+  weight: '400',
+  subsets: ['latin'],
+  variable: '--font-blackletter',
+});
+
+const fontSerif = Playfair_Display({
+  subsets: ['latin'],
+  variable: '--font-serif',
+});
+
+const fontInter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+});
+
 export const metadata: Metadata = {
   title: "Kanak's AI Portfolio",
   description: 'A personal portfolio showcasing projects and skills, enhanced with AI features.',
@@ -27,7 +45,13 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
       </head>
-      <body className={cn('font-body antialiased', fontPoppins.variable)}>
+      <body className={cn(
+        'font-body antialiased', 
+        fontPoppins.variable, 
+        fontBlackletter.variable, 
+        fontSerif.variable, 
+        fontInter.variable
+      )}>
         {children}
         <Toaster />
       </body>
