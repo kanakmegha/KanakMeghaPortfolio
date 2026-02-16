@@ -8,8 +8,17 @@ import { VintageSidebar } from '@/components/vintage/VintageSidebar';
 
 export default function VintagePortfolioPage() {
   return (
-    <div className="min-h-screen bg-news-bg text-news-ink selection:bg-yellow-200 grain-bg relative overflow-x-hidden">
-      <div className="max-w-6xl mx-auto border-x border-news-ink min-h-screen bg-news-bg relative z-10 shadow-2xl">
+    <div className="min-h-screen bg-news-bg text-news-ink selection:bg-yellow-200 grain-bg relative overflow-x-hidden" style={{ backgroundColor: '#FDFBF7' }}>
+      <div className="max-w-6xl mx-auto border-x border-news-ink min-h-screen bg-news-bg relative z-10 shadow-2xl pb-20">
+        
+        {/* Proof of Concept Masthead */}
+        <div className="w-full border-b-4 border-black py-8 px-4 text-center mb-8">
+          <h1 className="text-6xl md:text-8xl font-blackletter uppercase tracking-tighter" style={{ fontFamily: "'UnifrakturMaguntia', serif" }}>
+            Kanak Megha
+          </h1>
+          <p className="font-serif italic mt-2">Special Edition • Established 2026</p>
+        </div>
+
         <VintageMasthead />
         
         <main className="grid grid-cols-1 md:grid-cols-3 gap-0">

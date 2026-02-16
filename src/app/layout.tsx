@@ -44,14 +44,44 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            tailwind.config = {
+              theme: {
+                extend: {
+                  colors: {
+                    'news-bg': '#FDFBF7',
+                    'news-ink': '#2C2C2C',
+                    'news-accent': '#B22222',
+                  },
+                  fontFamily: {
+                    blackletter: ['UnifrakturMaguntia', 'serif'],
+                    serif: ['Playfair Display', 'serif'],
+                    sans: ['Inter', 'sans-serif'],
+                  }
+                }
+              }
+            }
+          `
+        }} />
       </head>
-      <body className={cn(
-        'font-body antialiased', 
-        fontPoppins.variable, 
-        fontBlackletter.variable, 
-        fontSerif.variable, 
-        fontInter.variable
-      )}>
+      <body 
+        className={cn(
+          'font-body antialiased', 
+          fontPoppins.variable, 
+          fontBlackletter.variable, 
+          fontSerif.variable, 
+          fontInter.variable
+        )}
+        style={{ 
+          backgroundColor: '#FDFBF7', 
+          color: '#2C2C2C',
+          fontFamily: "'Playfair Display', serif",
+          margin: 0,
+          padding: 0
+        }}
+      >
         {children}
         <Toaster />
       </body>
