@@ -5,7 +5,7 @@ import { EXPERIENCE } from "@/lib/data";
 
 export const CareerChronicle: React.FC = () => {
   return (
-    <aside className="w-full h-full pr-8 border-r border-news-ink/20 bg-[#F5F2ED]/50 p-6 shadow-sm border-2 border-dashed border-news-ink/10">
+    <aside className="w-full h-full pr-8 border-r border-news-ink/20 bg-news-bg p-6 shadow-sm border-2 border-dashed border-news-ink/10">
       <div className="border-b-2 border-news-ink mb-10 pb-4">
         <h3 className="font-serif font-black text-3xl tracking-tighter text-news-ink uppercase italic border-l-8 border-news-ink pl-4">
           Press Releases

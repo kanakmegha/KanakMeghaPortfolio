@@ -37,7 +37,7 @@ export const BroadsheetArticle: React.FC<BroadsheetArticleProps> = ({ title, des
   };
 
   return (
-    <article className={`relative group p-6 mb-8 bg-white border-2 border-dashed border-news-ink/20 shadow-sm hover:-translate-y-1 hover:shadow-lg transition-all duration-300 ${isFeatured ? 'md:col-span-2' : ''}`}>
+    <article className={`relative group p-6 mb-8 bg-news-bg border-2 border-dashed border-news-ink/20 shadow-sm hover:-translate-y-1 hover:shadow-lg transition-all duration-300 ${isFeatured ? 'md:col-span-2' : ''}`}>
       {/* Postage Stamp / Seal in Corner */}
       <a 
         href={url} 
@@ -67,7 +67,7 @@ export const BroadsheetArticle: React.FC<BroadsheetArticleProps> = ({ title, des
         </div>
       )}
       
-      <p className={`font-inter text-news-ink/80 text-justify leading-relaxed mb-6 line-clamp-3 ${isFeatured ? 'line-clamp-none text-lg' : 'text-sm'}`}>
+      <p className={`font-inter text-news-ink/80 text-justify leading-relaxed mb-6 line-clamp-3 ${isFeatured ? 'line-clamp-none text-lg' : 'text-base'}`}>
         {description || "A technical artifact cataloged for public review, demonstrating verified software engineering patterns and production-ready implementation."}
       </p>
       
