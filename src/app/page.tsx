@@ -13,8 +13,8 @@ export default function Home() {
   const [activeFilter, setActiveFilter] = useState('ALL');
 
   return (
-    <div className="min-h-screen bg-white text-news-ink selection:bg-news-ink selection:text-white relative overflow-x-hidden font-sans">
-      <div className="max-w-[1400px] mx-auto thick-border-top thick-border-bottom min-h-screen bg-white relative z-10 shadow-sm flex flex-col px-8">
+    <div className="min-h-screen bg-news-bg text-news-ink selection:bg-news-ink selection:text-white relative overflow-x-hidden font-inter pb-20">
+      <div className="max-w-[1400px] mx-auto thick-border-top thick-border-bottom min-h-screen bg-news-bg relative z-10 shadow-2xl flex flex-col px-4 md:px-12">
         
         <BroadsheetMasthead />
         <BroadsheetNav activeFilter={activeFilter} onFilterChange={setActiveFilter} />
@@ -30,19 +30,19 @@ export default function Home() {
             <BroadsheetProjectGrid username="skanakmegha" activeFilter={activeFilter} />
           </div>
 
-          {/* Notice Board (Full Width) */}
-          <div className="col-span-12 mt-12">
+          {/* Contact Section / Notice Board (Full Width) */}
+          <div className="col-span-12 section-rule">
             <ClassifiedAds />
           </div>
         </main>
 
-        <footer className="w-full border-t border-news-ink/10 py-12 flex justify-between items-end font-sans text-[10px] uppercase tracking-[0.4em] font-black opacity-40">
-          <div className="flex flex-col gap-2">
+        <footer className="w-full border-t-2 border-news-ink py-12 flex flex-col md:flex-row justify-between items-center gap-6 font-serif text-[10px] uppercase tracking-[0.4em] font-black border-double border-b-4 mt-12 pb-6">
+          <div className="flex flex-col items-center md:items-start gap-2">
             <div>Edition No. 042</div>
             <div>Bengaluru, India</div>
           </div>
-          <div className="text-2xl tracking-normal not-italic font-lora lowercase opacity-100">kanak megha.</div>
-          <div className="flex flex-col items-end gap-2">
+          <div className="text-4xl tracking-tighter font-serif lowercase italic">kanak megha.</div>
+          <div className="flex flex-col items-center md:items-end gap-2">
             <div>© 2026 Bureau of Tech</div>
             <div>All Rights Reserved</div>
           </div>

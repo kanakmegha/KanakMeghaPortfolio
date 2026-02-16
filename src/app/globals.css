@@ -5,21 +5,21 @@
 @layer base {
   :root {
     --background: #FDFBF7;
-    --background: #FFFFFF;
     --foreground: #1A1A1A;
     --news-ink: #1A1A1A;
-    --news-bg: #FFFFFF;
-    --news-accent: #1A1A1A;
+    --news-bg: #FDFBF7;
+    --news-accent: #B22222;
     /* Modern black accent */
-    --border-grey: #E5E7EB;
+    --border-grey: #1A1A1A;
+    /* Black rule lines preferred */
   }
 
   body {
-    background-color: #FFFFFF !important;
+    background-color: #FDFBF7 !important;
     color: #1A1A1A !important;
     font-family: var(--font-inter), sans-serif !important;
     font-size: 16px !important;
-    line-height: 1.5;
+    line-height: 1.6;
   }
 
   h1,
@@ -28,23 +28,30 @@
   h4,
   h5,
   h6 {
-    font-family: var(--font-inter), sans-serif !important;
-    font-weight: 900 !important;
-    text-transform: uppercase;
+    font-family: var(--font-serif), serif !important;
+    font-weight: 700 !important;
+    text-transform: none;
   }
 }
 
 @layer utilities {
+  .section-rule {
+    border-top: 2px solid #1A1A1A;
+    border-bottom: 2px solid #1A1A1A;
+    margin: 2rem 0;
+    padding: 0.5rem 0;
+  }
+
   .thick-border-top {
-    border-top: 5px solid #000000;
+    border-top: 4px solid #1A1A1A;
   }
 
   .thick-border-bottom {
-    border-bottom: 5px solid #000000;
+    border-bottom: 4px solid #1A1A1A;
   }
 
   .article-divider {
-    border-bottom: 1px solid #E5E7EB;
+    border-bottom: 1px solid rgba(26, 26, 26, 0.1);
   }
 
   .grid-12 {

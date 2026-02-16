@@ -5,23 +5,23 @@ import { EXPERIENCE } from "@/lib/data";
 
 export const CareerChronicle: React.FC = () => {
   return (
-    <aside className="w-full h-full pr-8 border-r border-news-ink/10">
+    <aside className="w-full h-full pr-8 border-r border-news-ink/20">
       <div className="border-b-2 border-news-ink mb-8 pb-2">
-        <h3 className="font-sans font-black text-2xl uppercase tracking-tighter text-news-ink">
+        <h3 className="font-serif font-black text-3xl tracking-tighter text-news-ink">
           Professional Chronicle
         </h3>
       </div>
 
       <div className="space-y-12">
         {EXPERIENCE.map((item, index) => (
-          <div key={index} className="relative group pb-8 border-b border-news-ink/5 last:border-0">
+          <div key={index} className="relative group pb-10 border-b border-news-ink/10 last:border-0">
             <div className="mb-3">
-              <span className="font-sans text-[10px] font-black uppercase tracking-[0.2em] text-news-ink/40">
+              <span className="font-sans text-[10px] font-black uppercase tracking-[0.2em] bg-news-accent text-white px-2 py-0.5">
                 {item.date}
               </span>
             </div>
             
-            <h4 className="font-sans font-black text-lg leading-tight mb-3 uppercase">
+            <h4 className="font-serif font-bold text-2xl leading-tight mb-3">
               {item.role}
             </h4>
             

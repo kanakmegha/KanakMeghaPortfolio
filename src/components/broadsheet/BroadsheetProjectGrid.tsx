@@ -9,6 +9,7 @@ interface Repo {
   description: string;
   html_url: string;
   topics: string[];
+  language?: string;
 }
 
 interface BroadsheetProjectGridProps {
@@ -44,38 +45,42 @@ export const BroadsheetProjectGrid: React.FC<BroadsheetProjectGridProps> = ({ us
   }, [username]);
 
   const getCategory = (repo: Repo) => {
-    const name = repo.name;
+    const text = `${repo.name} ${repo.description || ''}`.toLowerCase();
     
-    // Software Development
-    if (['BudgetManager', 'Sourcebin', 'KanakMeghaPortfolio', 'IsItDownOrJustMe'].includes(name)) {
-      return 'SOFTWARE DEVELOPMENT';
+    // NLP & AI
+    if (text.includes('summarizer') || text.includes('nlp') || text.includes('llama') || text.includes('chatbot')) {
+      return 'NLP & AI';
     }
-    // AI & Machine Learning
-    if (['QuickRead', 'Chatbot_using_llama3', 'PersonalisedStatLift', 'House-Price-Predictor'].includes(name)) {
-      return 'AI & MACHINE LEARNING';
-    }
-    // Deep Learning
-    if (['AI-Generated-Image-Detection', 'Disease-Prediction'].includes(name)) {
+    // DEEP LEARNING
+    if (text.includes('detection') || text.includes('ai-generated') || text.includes('disease') || text.includes('prediction')) {
       return 'DEEP LEARNING';
     }
-    // Research & Simulation
-    if (['CPU-Scheduling-Simulator', 'CodeQuest'].includes(name)) {
-      return 'RESEARCH & SIMULATION';
+    // SOFTWARE DEV
+    if (text.includes('budget') || text.includes('sourcebin') || text.includes('statlift') || text.includes('portfolio')) {
+      return 'SOFTWARE DEV';
+    }
+    // FINANCE
+    if (text.includes('price') || text.includes('budget') || text.includes('finance')) {
+      return 'FINANCE';
     }
     
     return 'DISPATCH';
   };
 
-  const filteredRepos = repos.filter(repo => {
+  const initialFilteredRepos = repos.filter(repo => {
     if (activeFilter === 'ALL') return true;
     return getCategory(repo) === activeFilter;
   });
 
+  // Fallback Logic: If category results are blank, show all
+  const filteredRepos = initialFilteredRepos.length > 0 ? initialFilteredRepos : repos;
+  const isFallback = initialFilteredRepos.length === 0 && activeFilter !== 'ALL';
+
   if (loading) {
     return (
-      <div className="w-full flex flex-col items-center justify-center py-32 bg-white border-b border-news-ink/10">
-        <div className="font-lora text-4xl animate-pulse mb-4 font-bold">Scanning Archives...</div>
-        <p className="font-sans italic text-sm text-news-ink/40">Fetching the latest technical reports.</p>
+      <div className="w-full flex flex-col items-center justify-center py-32 bg-news-bg/50 border-b border-news-ink/20">
+        <div className="font-serif text-4xl animate-pulse mb-4 font-black">Printing Bureau Archives...</div>
+        <p className="font-serif italic text-sm text-news-ink/60">Fetching the latest digital chronicles.</p>
       </div>
     );
   }
@@ -83,20 +88,21 @@ export const BroadsheetProjectGrid: React.FC<BroadsheetProjectGridProps> = ({ us
   return (
     <div className="w-full">
       {/* Front Page Headlines Section */}
-      <div className="border-b-4 border-news-ink py-2 mb-12 flex justify-between items-center">
-        <h2 className="font-sans font-black uppercase text-xs tracking-[0.4em] inline-block">
-          {activeFilter === 'ALL' ? 'Main Stream Report' : `${activeFilter} Reports`}
+      <div className="border-b-4 border-news-ink py-2 mb-12 flex justify-between items-center px-2">
+        <h2 className="font-serif font-black uppercase text-sm tracking-[0.2em] inline-block">
+          {activeFilter === 'ALL' ? 'Lead Stories: All Reports' : `Front Page: ${activeFilter} Section`}
         </h2>
-        <div className="text-[10px] font-bold text-news-ink/40 uppercase tracking-widest">
-          {filteredRepos.length} Stories Filed
-        </div>
+        {isFallback && (
+          <div className="text-[10px] font-bold text-news-accent uppercase tracking-widest italic animate-bounce">
+            Showing All Dispatch (No Specific Matches)
+          </div>
+        )}
       </div>
 
       {/* Grid for Stories */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-x-12 px-2">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 px-2">
         {filteredRepos.map((repo, index) => {
           const category = getCategory(repo);
-          const isDeepLearning = category === 'DEEP LEARNING' && activeFilter === 'ALL';
           
           return (
             <BroadsheetArticle 
@@ -105,16 +111,10 @@ export const BroadsheetProjectGrid: React.FC<BroadsheetProjectGridProps> = ({ us
               description={repo.description}
               url={repo.html_url}
               tag={category}
-              isFeatured={isDeepLearning}
+              language={repo.language}
             />
           );
         })}
-
-        {filteredRepos.length === 0 && (
-          <div className="col-span-full py-20 text-center border-2 border-dashed border-news-ink/10 rounded-lg">
-            <h4 className="font-sans italic text-xl opacity-20 uppercase tracking-widest font-black">No Dispatches Filed in this Section.</h4>
-          </div>
-        )}
       </div>
     </div>
   );

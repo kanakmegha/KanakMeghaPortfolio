@@ -8,9 +8,10 @@ interface BroadsheetArticleProps {
   url: string;
   tag?: string;
   isFeatured?: boolean;
+  language?: string;
 }
 
-export const BroadsheetArticle: React.FC<BroadsheetArticleProps> = ({ title, description, url, tag, isFeatured }) => {
+export const BroadsheetArticle: React.FC<BroadsheetArticleProps> = ({ title, description, url, tag, isFeatured, language }) => {
   // Logic to extract technologies from description or tag
   const getTechTags = () => {
     const techMap: Record<string, string[]> = {
@@ -36,33 +37,42 @@ export const BroadsheetArticle: React.FC<BroadsheetArticleProps> = ({ title, des
   };
 
   return (
-    <article className={`relative group pb-8 mb-8 article-divider last:border-0 ${isFeatured ? 'md:col-span-2 border-b-4 border-news-ink' : ''}`}>
-      <h3 className={`font-sans font-black text-news-ink uppercase leading-tight mb-3 hover:text-news-ink/70 transition-colors ${isFeatured ? 'text-4xl md:text-5xl' : 'text-xl md:text-2xl'}`}>
+    <article className={`relative group pb-8 mb-8 article-divider last:border-0 ${isFeatured ? 'md:col-span-2' : ''}`}>
+      <h3 className={`font-serif font-bold text-news-ink leading-tight mb-2 hover:text-news-accent transition-colors ${isFeatured ? 'text-4xl md:text-5xl' : 'text-2xl md:text-3xl'}`}>
         <a href={url} target="_blank" rel="noopener noreferrer">
           {title.replace(/-/g, ' ')}
         </a>
       </h3>
+
+      {language && (
+        <div className="flex items-center gap-2 mb-3">
+          <span className="inline-block bg-news-ink text-white text-[9px] font-black px-2 py-0.5 uppercase tracking-widest">
+            {language}
+          </span>
+          <span className="text-[10px] font-serif italic text-news-ink/40">Technical Dispatch</span>
+        </div>
+      )}
       
-      <p className={`font-sans text-news-ink/80 text-justify leading-relaxed mb-4 line-clamp-2 ${isFeatured ? 'line-clamp-none text-lg' : 'text-sm'}`}>
-        {description || "A cutting-edge implementation focusing on software engineering principles and advanced computational logic. Delivering high-performance solutions for modern digital challenges."}
+      <p className={`font-inter text-news-ink/90 text-justify leading-relaxed mb-6 line-clamp-3 ${isFeatured ? 'line-clamp-none text-lg' : 'text-base'}`}>
+        {description || "A comprehensive technical report on this implementation, detailing architectural decisions and performance outcomes in a production environment."}
       </p>
       
-      <div className="flex flex-wrap gap-2 mb-6">
-        {getTechTags().map(t => (
-          <span key={t} className="px-3 py-1 bg-news-ink/5 text-news-ink/70 text-[10px] font-black uppercase tracking-widest rounded-full border border-news-ink/10">
-            {t}
+      <div className="flex justify-between items-center">
+        <a 
+          href={url} 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="font-serif font-black uppercase text-xs tracking-widest text-news-ink border-b-2 border-news-ink pb-1 hover:text-news-accent hover:border-news-accent transition-all"
+        >
+          Read Full Report &rarr;
+        </a>
+        
+        {tag && (
+          <span className="text-[10px] font-serif italic opacity-40 uppercase">
+            Section: {tag}
           </span>
-        ))}
+        )}
       </div>
-
-      <a 
-        href={url} 
-        target="_blank" 
-        rel="noopener noreferrer"
-        className="font-sans font-black uppercase text-[10px] tracking-[0.2em] text-news-ink hover:text-news-ink/40 transition-colors border-b-2 border-news-ink pb-1"
-      >
-        View Full Repository &rarr;
-      </a>
     </article>
   );
 };
