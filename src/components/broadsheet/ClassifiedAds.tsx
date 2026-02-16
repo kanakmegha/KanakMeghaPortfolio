@@ -1,62 +1,62 @@
 'use client';
 
 import React from 'react';
-import { SOCIAL_LINKS } from "@/lib/data";
 
 export const ClassifiedAds: React.FC = () => {
   return (
-    <section className="w-full border-t-4 border-news-ink border-double pt-12 pb-16 px-6">
+    <section className="w-full border-t-2 border-news-ink pt-12 pb-24 px-6 mb-10">
       <div className="max-w-6xl mx-auto">
-        <div className="border-b-2 border-news-ink mb-12 pb-2 text-center">
-          <h2 className="font-blackletter text-4xl uppercase tracking-widest">
-            Classifieds: Work with Kanak Megha
+        <div className="border-b-4 border-news-ink mb-12 pb-2 text-center">
+          <h2 className="font-sans font-black text-4xl uppercase tracking-[0.2em]">
+            Notice Board
           </h2>
+          <p className="font-serif italic text-sm mt-1">Formal Announcements & Public Tenders</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Email Ad */}
-          <div className="border-2 border-news-ink p-6 transition-transform hover:-rotate-1 hover:scale-105 bg-white shadow-[4px_4px_0px_0px_rgba(26,26,26,1)]">
-            <h3 className="font-serif font-black border-b border-news-ink mb-3 uppercase text-xs tracking-widest">
-              Position Vacant: Lead Engineer
+          {/* Ad 1 */}
+          <div className="border-2 border-dotted border-news-ink p-6 transition-colors hover:bg-news-accent/5">
+            <h3 className="font-sans font-black border-b-2 border-news-ink mb-4 uppercase text-sm tracking-widest pb-1">
+              Employment Notice
             </h3>
-            <p className="font-inter text-sm mb-4 leading-snug">
-              FOR HIRE: Talented Developer with expertise in AI, ML, and Next.js. Seeking innovative projects and complex engineering challenges. 
+            <p className="font-serif text-sm mb-6 leading-relaxed">
+              Applications are invited from engineering firms and innovative startups for high-end technical services. Specialized in Machine Learning, Scalable Backend Architectures, and Next.js Deployments.
             </p>
-            <div className="font-bold border-t border-news-ink pt-2 text-sm text-center">
-              CONTACT: skanakmegha@gmail.com
+            <div className="font-sans font-black border-t border-news-ink/20 pt-4 text-sm text-center">
+              EMAIL: skanakmegha@gmail.com
             </div>
           </div>
 
-          {/* LinkedIn Ad */}
-          <div className="border-2 border-news-ink p-6 transition-transform hover:rotate-1 hover:scale-105 bg-white shadow-[4px_4px_0px_0px_rgba(26,26,26,1)]">
-            <h3 className="font-serif font-black border-b border-news-ink mb-3 uppercase text-xs tracking-widest">
-              Professional Networking
+          {/* Ad 2 */}
+          <div className="border-2 border-dotted border-news-ink p-6 transition-colors hover:bg-news-accent/5">
+            <h3 className="font-sans font-black border-b-2 border-news-ink mb-4 uppercase text-sm tracking-widest pb-1">
+              Public Relations
             </h3>
-            <p className="font-inter text-sm mb-4 leading-snug">
-              Inquiries regarding professional background, verified endorsements, and collaborative history can be directed through established channels.
+            <p className="font-serif text-sm mb-6 leading-relaxed">
+              Verify credentials, view corporate history, and engage in professional dialogue via established networking protocols. Verified identity available on LinkedIn platform.
             </p>
-            <div className="font-bold border-t border-news-ink pt-2 text-sm text-center">
-              <a href="https://linkedin.com/in/kanak-megha" className="underline decoration-news-accent underline-offset-4">LINKEDIN PROFILE</a>
+            <div className="font-sans font-black border-t border-news-ink/20 pt-4 text-sm text-center">
+              <a href="https://linkedin.com/in/kanak-megha" className="underline decoration-news-accent underline-offset-4">OFFICIAL PROFILE</a>
             </div>
           </div>
 
-          {/* GitHub Ad */}
-          <div className="border-2 border-news-ink p-6 transition-transform hover:-rotate-1 hover:scale-105 bg-white shadow-[4px_4px_0px_0px_rgba(26,26,26,1)]">
-            <h3 className="font-serif font-black border-b border-news-ink mb-3 uppercase text-xs tracking-widest">
-              Open Source Intelligence
+          {/* Ad 3 */}
+          <div className="border-2 border-dotted border-news-ink p-6 transition-colors hover:bg-news-accent/5">
+            <h3 className="font-sans font-black border-b-2 border-news-ink mb-4 uppercase text-sm tracking-widest pb-1">
+              Tender: Code Review
             </h3>
-            <p className="font-inter text-sm mb-4 leading-snug">
-              Full repository access granted for due diligence. Inspect architectures, algorithms, and documentation for verified performance metrics.
+            <p className="font-serif text-sm mb-6 leading-relaxed">
+              Access to full project documentation, architectural blueprints, and codebase history is now open for public inspection. Performance metrics and audit reports attached.
             </p>
-            <div className="font-bold border-t border-news-ink pt-2 text-sm text-center">
-              <a href="https://github.com/skanakmegha" className="underline decoration-news-accent underline-offset-4">GITHUB ARCHIVES</a>
+            <div className="font-sans font-black border-t border-news-ink/20 pt-4 text-sm text-center">
+              <a href="https://github.com/skanakmegha" className="underline decoration-news-accent underline-offset-4">VIEW REPOSITORIES</a>
             </div>
           </div>
         </div>
 
-        <div className="mt-12 text-center">
-          <div className="inline-block border border-news-ink px-4 py-1 font-serif italic text-xs opacity-60 uppercase tracking-widest font-bold">
-            All Inquiries Treated with Absolute Confidentiality
+        <div className="mt-12 text-center opacity-40">
+          <div className="inline-block border-2 border-news-ink px-6 py-2 font-sans font-black text-xs uppercase tracking-[0.3em]">
+            Issued by the Office of Kanak Megha
           </div>
         </div>
       </div>

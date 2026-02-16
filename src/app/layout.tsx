@@ -10,7 +10,7 @@ const fontPoppins = Poppins({
   variable: '--font-poppins',
 });
 
-import { UnifrakturMaguntia, Playfair_Display, Inter } from 'next/font/google';
+import { UnifrakturMaguntia, Playfair_Display, Inter, Lora } from 'next/font/google';
 
 const fontBlackletter = UnifrakturMaguntia({
   weight: '400',
@@ -26,6 +26,11 @@ const fontSerif = Playfair_Display({
 const fontInter = Inter({
   subsets: ['latin'],
   variable: '--font-inter',
+});
+
+const fontLora = Lora({
+  subsets: ['latin'],
+  variable: '--font-lora',
 });
 
 export const metadata: Metadata = {
@@ -68,11 +73,12 @@ export default function RootLayout({
       </head>
       <body 
         className={cn(
-          'font-body antialiased', 
-          fontPoppins.variable, 
-          fontBlackletter.variable, 
-          fontSerif.variable, 
-          fontInter.variable
+          'min-h-screen font-body antialiased',
+          fontPoppins.variable,
+          fontBlackletter.variable,
+          fontSerif.variable,
+          fontInter.variable,
+          fontLora.variable
         )}
         style={{ 
           backgroundColor: '#FDFBF7', 

@@ -14,7 +14,7 @@
   body {
     background-color: #FDFBF7 !important;
     color: #1A1A1A !important;
-    font-family: var(--font-inter), sans-serif !important;
+    font-family: var(--font-lora), serif !important;
     font-size: 16px !important;
     line-height: 1.6;
   }
@@ -25,11 +25,25 @@
   h4,
   h5,
   h6 {
-    font-family: var(--font-serif), serif !important;
+    font-family: var(--font-inter), sans-serif !important;
+    font-weight: 900 !important;
+    text-transform: uppercase;
   }
 }
 
 @layer utilities {
+  .thick-border-top {
+    border-top: 4px solid #1A1A1A;
+  }
+
+  .thick-border-bottom {
+    border-bottom: 4px solid #1A1A1A;
+  }
+
+  .article-divider {
+    border-bottom: 1px solid #E5E5E5;
+  }
+
   .grid-12 {
     display: grid;
     grid-template-columns: repeat(12, minmax(0, 1fr));
@@ -94,6 +108,20 @@
 
     100% {
       top: 110%;
+    }
+  }
+
+  .animate-ticker {
+    animation: ticker 30s linear infinite;
+  }
+
+  @keyframes ticker {
+    0% {
+      transform: translateX(0);
+    }
+
+    100% {
+      transform: translateX(-50%);
     }
   }
 

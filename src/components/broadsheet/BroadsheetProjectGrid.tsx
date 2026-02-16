@@ -44,13 +44,24 @@ export const BroadsheetProjectGrid: React.FC<BroadsheetProjectGridProps> = ({ us
   }, [username]);
 
   const getCategory = (repo: Repo) => {
-    const topics = repo.topics.map(t => t.toLowerCase());
-    if (topics.includes('security')) return 'SECURITY';
-    if (topics.includes('ai') || topics.includes('nlp')) return 'NLP & AI';
-    if (topics.includes('cv') || topics.includes('vision')) return 'COMPUTER VISION';
-    if (topics.includes('healthcare') || topics.includes('medical')) return 'HEALTHCARE';
-    if (topics.includes('finance')) return 'FINANCE';
-    if (topics.includes('web') || topics.includes('react')) return 'WEB';
+    const text = `${repo.name} ${repo.description || ''}`.toLowerCase();
+    
+    if (text.includes('password') || text.includes('security') || text.includes('check')) {
+      return 'SECURITY';
+    }
+    if (text.includes('summarizer') || text.includes('nlp') || text.includes('ai')) {
+      return 'NLP & AI';
+    }
+    if (text.includes('image') || text.includes('detection') || text.includes('vision')) {
+      return 'COMPUTER VISION';
+    }
+    if (text.includes('disease') || text.includes('prediction') || text.includes('system')) {
+      return 'HEALTHCARE';
+    }
+    if (text.includes('budget') || text.includes('finance') || text.includes('price')) {
+      return 'FINANCE';
+    }
+    
     return 'DISPATCH';
   };
 
