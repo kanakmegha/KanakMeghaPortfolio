@@ -27,7 +27,7 @@ export default function Home() {
 
           {/* Main Content Area: Projects (9 Columns) */}
           <div className="col-span-12 lg:col-span-9">
-            <BroadsheetProjectGrid username="skanakmegha" activeFilter={activeFilter} />
+            <BroadsheetProjectGrid username="kanakmegha" activeFilter={activeFilter} />
           </div>
 
           {/* Contact Section / Notice Board (Full Width) */}

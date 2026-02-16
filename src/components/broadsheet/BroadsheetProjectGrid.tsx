@@ -25,17 +25,22 @@ export const BroadsheetProjectGrid: React.FC<BroadsheetProjectGridProps> = ({ us
     const fetchRepos = async () => {
       setLoading(true);
       try {
+        console.log(`[Broadsheet] Fetching repos for ${username}...`);
         const response = await fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=30`, {
           headers: {
             Accept: 'application/vnd.github.mercy-preview+json',
           }
         });
         const data = await response.json();
+        
         if (Array.isArray(data)) {
+          console.log(`[Broadsheet] Successfully fetched ${data.length} repos.`);
           setRepos(data);
+        } else {
+          console.error('[Broadsheet] GitHub API returned an error or non-array response:', data);
         }
       } catch (error) {
-        console.error('Error fetching repos:', error);
+        console.error('[Broadsheet] Network error fetching repos:', error);
       } finally {
         setLoading(false);
       }
