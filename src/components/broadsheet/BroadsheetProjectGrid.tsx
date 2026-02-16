@@ -11,16 +11,22 @@ interface Repo {
   topics: string[];
 }
 
-export const BroadsheetProjectGrid: React.FC<{ username: string }> = ({ username }) => {
+interface BroadsheetProjectGridProps {
+  username: string;
+  activeFilter: string;
+}
+
+export const BroadsheetProjectGrid: React.FC<BroadsheetProjectGridProps> = ({ username, activeFilter }) => {
   const [repos, setRepos] = useState<Repo[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchRepos = async () => {
+      setLoading(true);
       try {
-        const response = await fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=12`, {
+        const response = await fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=30`, {
           headers: {
-            Accept: 'application/vnd.github.mercy-preview+json', // Required for topics
+            Accept: 'application/vnd.github.mercy-preview+json',
           }
         });
         const data = await response.json();
@@ -37,27 +43,44 @@ export const BroadsheetProjectGrid: React.FC<{ username: string }> = ({ username
     fetchRepos();
   }, [username]);
 
-  if (loading) {
-    return <div className="p-12 font-serif text-center animate-pulse">Consulting the Archives...</div>;
-  }
-
-  // Logic to categorize
-  const featured = repos.find(r => r.topics.includes('featured') || r.name.toLowerCase().includes('quickread')) || repos[0];
-  const others = repos.filter(r => r.id !== featured?.id);
-
-  const getTag = (repo: Repo) => {
-    if (repo.topics.includes('security')) return 'SECURITY';
-    if (repo.topics.includes('ai') || repo.topics.includes('nlp')) return 'NLP & AI';
-    if (repo.topics.includes('cv') || repo.topics.includes('vision')) return 'COMPUTER VISION';
-    if (repo.topics.includes('healthcare') || repo.topics.includes('medical')) return 'HEALTHCARE';
-    if (repo.topics.includes('finance')) return 'FINANCE';
-    if (repo.topics.includes('web') || repo.topics.includes('react')) return 'WEB';
+  const getCategory = (repo: Repo) => {
+    const topics = repo.topics.map(t => t.toLowerCase());
+    if (topics.includes('security')) return 'SECURITY';
+    if (topics.includes('ai') || topics.includes('nlp')) return 'NLP & AI';
+    if (topics.includes('cv') || topics.includes('vision')) return 'COMPUTER VISION';
+    if (topics.includes('healthcare') || topics.includes('medical')) return 'HEALTHCARE';
+    if (topics.includes('finance')) return 'FINANCE';
+    if (topics.includes('web') || topics.includes('react')) return 'WEB';
     return 'DISPATCH';
   };
 
+  const filteredRepos = repos.filter(repo => {
+    if (activeFilter === 'ALL') return true;
+    return getCategory(repo) === activeFilter;
+  });
+
+  if (loading) {
+    return (
+      <div className="w-full flex flex-col items-center justify-center py-32 bg-news-bg/50 border-b border-news-ink">
+        <div className="font-blackletter text-4xl animate-pulse mb-4">Printing in Progress...</div>
+        <p className="font-serif italic text-sm">Waiting for the morning edition to hit the press.</p>
+      </div>
+    );
+  }
+
+  // Define Featured Story (Top of the page)
+  const featured = filteredRepos.find(r => r.topics.includes('featured')) || filteredRepos[0];
+  const others = filteredRepos.filter(r => r.id !== featured?.id);
+
   return (
     <div className="w-full">
-      {/* Featured Story */}
+      {/* Front Page Headlines Section */}
+      <div className="border-b-4 border-news-ink border-double py-2 mb-8 bg-news-ink text-white px-6">
+        <h2 className="font-serif font-black uppercase text-sm tracking-[0.3em] inline-block">
+          {activeFilter === 'ALL' ? 'Front Page Headlines' : `Front Page: ${activeFilter} Section`}
+        </h2>
+      </div>
+
       {featured && (
         <section className="mb-12 border-b-2 border-news-ink pb-8 px-6">
           <BroadsheetArticle 
@@ -70,53 +93,23 @@ export const BroadsheetProjectGrid: React.FC<{ username: string }> = ({ username
         </section>
       )}
 
-      {/* Main Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 px-6 pb-12">
-        {/* Left Column: Secondary Stories */}
-        <div className="flex flex-col border-r-0 md:border-r border-news-ink md:pr-8">
-          <h4 className="font-serif font-black uppercase text-sm mb-6 border-b border-news-ink pb-1">Regional News</h4>
-          {others.slice(0, 3).map(repo => (
-            <BroadsheetArticle 
-              key={repo.id}
-              title={repo.name}
-              description={repo.description}
-              url={repo.html_url}
-              tag={getTag(repo)}
-            />
-          ))}
-        </div>
+      {/* 2-Column Grid for Secondary Stories */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 px-6 pb-20">
+        {others.map((repo, index) => (
+          <BroadsheetArticle 
+            key={repo.id}
+            title={repo.name}
+            description={repo.description}
+            url={repo.html_url}
+            tag={getCategory(repo)}
+          />
+        ))}
 
-        {/* Middle Column: Current Affairs */}
-        <div className="flex flex-col border-r-0 md:border-r border-news-ink md:px-4">
-          <h4 className="font-serif font-black uppercase text-sm mb-6 border-b border-news-ink pb-1">Current Affairs</h4>
-          {others.slice(3, 6).map(repo => (
-            <BroadsheetArticle 
-              key={repo.id}
-              title={repo.name}
-              description={repo.description}
-              url={repo.html_url}
-              tag={getTag(repo)}
-            />
-          ))}
-        </div>
-
-        {/* Right Column: The Archives */}
-        <div className="flex flex-col md:pl-8">
-          <h4 className="font-serif font-black uppercase text-sm mb-6 border-b border-news-ink pb-1">Historical Data</h4>
-          {others.slice(6).map(repo => (
-            <article key={repo.id} className="mb-4 pb-4 border-b border-news-ink/10 last:border-0 hover:bg-news-ink/5 p-1 transition-colors">
-              <h5 className="font-serif font-bold text-sm uppercase">
-                <a href={repo.html_url}>{repo.name}</a>
-              </h5>
-              <div className="text-[10px] font-mono opacity-60">REF #{repo.id}</div>
-            </article>
-          ))}
-          
-          <div className="mt-auto border-2 border-news-ink p-4 bg-white/40 italic text-xs text-justify">
-            <p className="font-serif">"The archive section represents foundational work in computational theory, scheduling algorithms, and early software engineering paradigms. These entries are preserved for academic and historical reference."</p>
-            <div className="text-right mt-2 font-bold">— THE ARCHIVIST</div>
+        {filteredRepos.length === 0 && (
+          <div className="col-span-2 py-20 text-center border-2 border-dashed border-news-ink/20">
+            <h4 className="font-serif italic text-xl opacity-40 uppercase">No Dispatches currently filed under this section.</h4>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

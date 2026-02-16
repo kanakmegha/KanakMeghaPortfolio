@@ -12,44 +12,46 @@ interface BroadsheetArticleProps {
 
 export const BroadsheetArticle: React.FC<BroadsheetArticleProps> = ({ title, description, url, tag, isFeatured }) => {
   return (
-    <article className={`relative group border-b border-news-ink pb-6 mb-6 article-hover ${isFeatured ? 'md:col-span-3 border-b-4' : ''}`}>
+    <article className={`relative group border-b border-news-ink pb-8 mb-8 article-hover ${isFeatured ? 'md:col-start-1 md:col-end-13 border-b-4' : ''}`}>
       <div className="scan-line" />
       
       {tag && (
-        <span className="inline-block bg-news-accent text-white text-[10px] font-bold px-2 py-0.5 mb-2 uppercase tracking-widest">
+        <span className="inline-block bg-news-accent text-white text-[11px] font-bold px-2 py-0.5 mb-3 uppercase tracking-[0.2em]">
           {tag}
         </span>
       )}
       
-      <h3 className={`font-serif font-bold text-news-ink uppercase leading-tight mb-2 ${isFeatured ? 'text-4xl md:text-6xl' : 'text-xl md:text-2xl hover:text-news-accent transition-colors'}`}>
+      <h3 className={`font-serif font-black text-news-ink uppercase leading-tight mb-4 ${isFeatured ? 'text-5xl md:text-7xl' : 'text-2xl md:text-3xl hover:text-news-accent transition-colors underline decoration-news-ink/30'}`}>
         <a href={url} target="_blank" rel="noopener noreferrer">
           {title.replace(/-/g, ' ')}
         </a>
       </h3>
       
-      <div className="font-serif italic text-xs mb-3 border-b border-news-ink/20 pb-1">
-        By Kanak Megha | Dispatched from Bengaluru
+      <div className="font-serif italic text-sm mb-4 border-b border-news-ink/20 pb-2">
+        <span className="font-bold uppercase not-italic mr-2">Lead Report:</span>
+        By Kanak Megha | Bengaluru Bureau
       </div>
       
-      <p className={`font-serif text-news-ink text-justify leading-relaxed ${isFeatured ? 'text-lg md:text-xl' : 'text-sm'}`}>
-        {description || "In a significant development for the open-source community, this project demonstrates a pioneering approach to system architecture. Detailed reports suggest high efficiency and a modular design that scales seamlessly."}
+      <p className={`font-inter text-[#1A1A1A] text-justify leading-relaxed line-clamp-2 mb-6 ${isFeatured ? 'text-xl md:text-2xl line-clamp-none' : 'text-base'}`}>
+        {description || "In a significant development today, this deployment demonstrates advanced architectural patterns and a commitment to high-performance computational engineering. Detailed reports confirm full scalability."}
       </p>
       
-      {isFeatured && (
-        <div className="mt-6 flex gap-4">
-          <a href={url} className="px-4 py-2 bg-news-ink text-white font-serif font-bold uppercase text-sm hover:bg-news-accent transition-colors">
-            Read Full Report
-          </a>
-          <div className="flex-1 border-t-2 border-news-ink mt-4 border-double" />
-        </div>
-      )}
-
-      {!isFeatured && (
-        <div className="mt-4 text-[10px] font-bold uppercase tracking-widest flex justify-between items-center opacity-70 group-hover:opacity-100 transition-opacity">
-          <span>Continued on GitHub</span>
-          <span>&rarr;</span>
-        </div>
-      )}
+      <div className="flex justify-between items-center">
+        <a 
+          href={url} 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="font-serif font-bold uppercase text-xs tracking-widest bg-news-ink text-white px-4 py-2 hover:bg-news-accent transition-colors"
+        >
+          Read Full Report &rarr;
+        </a>
+        
+        {!isFeatured && (
+          <div className="text-[10px] font-mono opacity-40 uppercase tracking-tighter">
+            Dispatch ID: GH-{Math.floor(Math.random() * 9000) + 1000}
+          </div>
+        )}
+      </div>
     </article>
   );
 };
