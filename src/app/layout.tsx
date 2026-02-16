@@ -84,6 +84,12 @@ export default function RootLayout({
       >
         {children}
         <Toaster />
+        <svg style={{ display: 'none' }}>
+          <filter id="paper-grain">
+            <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch" />
+            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.15 0" />
+          </filter>
+        </svg>
       </body>
     </html>
   );
