@@ -44,22 +44,23 @@ export const BroadsheetProjectGrid: React.FC<BroadsheetProjectGridProps> = ({ us
   }, [username]);
 
   const getCategory = (repo: Repo) => {
-    const text = `${repo.name} ${repo.description || ''}`.toLowerCase();
+    const name = repo.name;
     
-    if (text.includes('password') || text.includes('security') || text.includes('check')) {
-      return 'SECURITY';
+    // Software Development
+    if (['BudgetManager', 'Sourcebin', 'KanakMeghaPortfolio', 'IsItDownOrJustMe'].includes(name)) {
+      return 'SOFTWARE DEVELOPMENT';
     }
-    if (text.includes('summarizer') || text.includes('nlp') || text.includes('ai')) {
-      return 'NLP & AI';
+    // AI & Machine Learning
+    if (['QuickRead', 'Chatbot_using_llama3', 'PersonalisedStatLift', 'House-Price-Predictor'].includes(name)) {
+      return 'AI & MACHINE LEARNING';
     }
-    if (text.includes('image') || text.includes('detection') || text.includes('vision')) {
-      return 'COMPUTER VISION';
+    // Deep Learning
+    if (['AI-Generated-Image-Detection', 'Disease-Prediction'].includes(name)) {
+      return 'DEEP LEARNING';
     }
-    if (text.includes('disease') || text.includes('prediction') || text.includes('system')) {
-      return 'HEALTHCARE';
-    }
-    if (text.includes('budget') || text.includes('finance') || text.includes('price')) {
-      return 'FINANCE';
+    // Research & Simulation
+    if (['CPU-Scheduling-Simulator', 'CodeQuest'].includes(name)) {
+      return 'RESEARCH & SIMULATION';
     }
     
     return 'DISPATCH';
@@ -72,53 +73,46 @@ export const BroadsheetProjectGrid: React.FC<BroadsheetProjectGridProps> = ({ us
 
   if (loading) {
     return (
-      <div className="w-full flex flex-col items-center justify-center py-32 bg-news-bg/50 border-b border-news-ink">
-        <div className="font-blackletter text-4xl animate-pulse mb-4">Printing in Progress...</div>
-        <p className="font-serif italic text-sm">Waiting for the morning edition to hit the press.</p>
+      <div className="w-full flex flex-col items-center justify-center py-32 bg-white border-b border-news-ink/10">
+        <div className="font-lora text-4xl animate-pulse mb-4 font-bold">Scanning Archives...</div>
+        <p className="font-sans italic text-sm text-news-ink/40">Fetching the latest technical reports.</p>
       </div>
     );
   }
 
-  // Define Featured Story (Top of the page)
-  const featured = filteredRepos.find(r => r.topics.includes('featured')) || filteredRepos[0];
-  const others = filteredRepos.filter(r => r.id !== featured?.id);
-
   return (
     <div className="w-full">
       {/* Front Page Headlines Section */}
-      <div className="border-b-4 border-news-ink border-double py-2 mb-8 bg-news-ink text-white px-6">
-        <h2 className="font-serif font-black uppercase text-sm tracking-[0.3em] inline-block">
-          {activeFilter === 'ALL' ? 'Front Page Headlines' : `Front Page: ${activeFilter} Section`}
+      <div className="border-b-4 border-news-ink py-2 mb-12 flex justify-between items-center">
+        <h2 className="font-sans font-black uppercase text-xs tracking-[0.4em] inline-block">
+          {activeFilter === 'ALL' ? 'Main Stream Report' : `${activeFilter} Reports`}
         </h2>
+        <div className="text-[10px] font-bold text-news-ink/40 uppercase tracking-widest">
+          {filteredRepos.length} Stories Filed
+        </div>
       </div>
 
-      {featured && (
-        <section className="mb-12 border-b-2 border-news-ink pb-8 px-6">
-          <BroadsheetArticle 
-            title={featured.name}
-            description={featured.description}
-            url={featured.html_url}
-            tag="SPECIAL REPORT"
-            isFeatured={true}
-          />
-        </section>
-      )}
-
-      {/* 2-Column Grid for Secondary Stories */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 px-6 pb-20">
-        {others.map((repo, index) => (
-          <BroadsheetArticle 
-            key={repo.id}
-            title={repo.name}
-            description={repo.description}
-            url={repo.html_url}
-            tag={getCategory(repo)}
-          />
-        ))}
+      {/* Grid for Stories */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-x-12 px-2">
+        {filteredRepos.map((repo, index) => {
+          const category = getCategory(repo);
+          const isDeepLearning = category === 'DEEP LEARNING' && activeFilter === 'ALL';
+          
+          return (
+            <BroadsheetArticle 
+              key={repo.id}
+              title={repo.name}
+              description={repo.description}
+              url={repo.html_url}
+              tag={category}
+              isFeatured={isDeepLearning}
+            />
+          );
+        })}
 
         {filteredRepos.length === 0 && (
-          <div className="col-span-2 py-20 text-center border-2 border-dashed border-news-ink/20">
-            <h4 className="font-serif italic text-xl opacity-40 uppercase">No Dispatches currently filed under this section.</h4>
+          <div className="col-span-full py-20 text-center border-2 border-dashed border-news-ink/10 rounded-lg">
+            <h4 className="font-sans italic text-xl opacity-20 uppercase tracking-widest font-black">No Dispatches Filed in this Section.</h4>
           </div>
         )}
       </div>

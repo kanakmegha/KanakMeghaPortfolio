@@ -5,18 +5,21 @@
 @layer base {
   :root {
     --background: #FDFBF7;
+    --background: #FFFFFF;
     --foreground: #1A1A1A;
     --news-ink: #1A1A1A;
-    --news-bg: #FDFBF7;
-    --news-accent: #B22222;
+    --news-bg: #FFFFFF;
+    --news-accent: #1A1A1A;
+    /* Modern black accent */
+    --border-grey: #E5E7EB;
   }
 
   body {
-    background-color: #FDFBF7 !important;
+    background-color: #FFFFFF !important;
     color: #1A1A1A !important;
-    font-family: var(--font-lora), serif !important;
+    font-family: var(--font-inter), sans-serif !important;
     font-size: 16px !important;
-    line-height: 1.6;
+    line-height: 1.5;
   }
 
   h1,
@@ -33,15 +36,15 @@
 
 @layer utilities {
   .thick-border-top {
-    border-top: 4px solid #1A1A1A;
+    border-top: 5px solid #000000;
   }
 
   .thick-border-bottom {
-    border-bottom: 4px solid #1A1A1A;
+    border-bottom: 5px solid #000000;
   }
 
   .article-divider {
-    border-bottom: 1px solid #E5E5E5;
+    border-bottom: 1px solid #E5E7EB;
   }
 
   .grid-12 {

@@ -11,47 +11,58 @@ interface BroadsheetArticleProps {
 }
 
 export const BroadsheetArticle: React.FC<BroadsheetArticleProps> = ({ title, description, url, tag, isFeatured }) => {
+  // Logic to extract technologies from description or tag
+  const getTechTags = () => {
+    const techMap: Record<string, string[]> = {
+      'next.js': ['Next.js', 'React'],
+      'react': ['React', 'Tailwind'],
+      'python': ['Python'],
+      'llama': ['Llama 3', 'GenAI'],
+      'ml': ['ML'],
+      'deep learning': ['Deep Learning', 'PyTorch'],
+      'ai': ['AI'],
+      'software': ['Software'],
+    };
+    
+    const tags: string[] = [];
+    const text = (description || '').toLowerCase();
+    
+    Object.keys(techMap).forEach(key => {
+      if (text.includes(key)) tags.push(...techMap[key]);
+    });
+    
+    const uniqueTags = Array.from(new Set(tags)).slice(0, 3);
+    return uniqueTags.length > 0 ? uniqueTags : [tag || 'Project'];
+  };
+
   return (
-    <article className={`relative group pb-8 mb-8 article-divider last:border-0 article-hover ${isFeatured ? 'md:col-start-1 md:col-end-13 border-b-4 border-news-ink' : ''}`}>
-      <div className="scan-line" />
-      
-      {tag && (
-        <span className="inline-block bg-news-accent text-white text-[11px] font-bold px-2 py-0.5 mb-3 uppercase tracking-[0.2em] font-sans">
-          {tag}
-        </span>
-      )}
-      
-      <h3 className={`font-sans font-black text-news-ink uppercase leading-tight mb-4 ${isFeatured ? 'text-5xl md:text-7xl' : 'text-2xl md:text-3xl hover:text-news-accent transition-colors'}`}>
+    <article className={`relative group pb-8 mb-8 article-divider last:border-0 ${isFeatured ? 'md:col-span-2 border-b-4 border-news-ink' : ''}`}>
+      <h3 className={`font-sans font-black text-news-ink uppercase leading-tight mb-3 hover:text-news-ink/70 transition-colors ${isFeatured ? 'text-4xl md:text-5xl' : 'text-xl md:text-2xl'}`}>
         <a href={url} target="_blank" rel="noopener noreferrer">
           {title.replace(/-/g, ' ')}
         </a>
       </h3>
       
-      <div className="font-serif italic text-sm mb-4 border-b border-news-ink/10 pb-2">
-        <span className="font-bold uppercase not-italic mr-2 font-sans">Special Report:</span>
-        By Kanak Megha | Bengaluru Bureau
-      </div>
-      
-      <p className={`font-serif text-[#1A1A1A] text-justify leading-relaxed mb-6 ${isFeatured ? 'text-xl md:text-2xl' : 'text-base line-clamp-3'}`}>
-        {description || "In a significant development today, this deployment demonstrates advanced architectural patterns and a commitment to high-performance computational engineering. Detailed reports confirm full scalability and modular design."}
+      <p className={`font-sans text-news-ink/80 text-justify leading-relaxed mb-4 line-clamp-2 ${isFeatured ? 'line-clamp-none text-lg' : 'text-sm'}`}>
+        {description || "A cutting-edge implementation focusing on software engineering principles and advanced computational logic. Delivering high-performance solutions for modern digital challenges."}
       </p>
       
-      <div className="flex justify-between items-center">
-        <a 
-          href={url} 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="font-sans font-black uppercase text-xs tracking-widest bg-news-ink text-white px-4 py-2 hover:bg-news-accent transition-colors"
-        >
-          Read Full Report &rarr;
-        </a>
-        
-        {!isFeatured && (
-          <div className="text-[10px] font-mono opacity-40 uppercase tracking-tighter">
-            FILE REF: GH-{Math.floor(Math.random() * 9000) + 1000}
-          </div>
-        )}
+      <div className="flex flex-wrap gap-2 mb-6">
+        {getTechTags().map(t => (
+          <span key={t} className="px-3 py-1 bg-news-ink/5 text-news-ink/70 text-[10px] font-black uppercase tracking-widest rounded-full border border-news-ink/10">
+            {t}
+          </span>
+        ))}
       </div>
+
+      <a 
+        href={url} 
+        target="_blank" 
+        rel="noopener noreferrer"
+        className="font-sans font-black uppercase text-[10px] tracking-[0.2em] text-news-ink hover:text-news-ink/40 transition-colors border-b-2 border-news-ink pb-1"
+      >
+        View Full Repository &rarr;
+      </a>
     </article>
   );
 };
