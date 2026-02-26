@@ -58,9 +58,7 @@ export const PROJECTS = [
     aiHint: "abstract computer processor",
   },
 ];
-
-export const EXPERIENCE = [
-    {
+/*{
         company: "Unikul Solutions Pvt Ltd.",
         role: "Software Developer",
         date: "Aug 2024 - Present",
@@ -70,7 +68,9 @@ export const EXPERIENCE = [
         Participated in debugging, version control (Git), and deployment automation\
         (CI/CD pipelines). Collaborated with cross-functional teams to enhance system performance and scalability.\
         Automations: Designed and implemented Python scripts to automate repetitive manual tasks, improving efficiency and reducing errors. Leadership & Mentorship: Mentored a junior colleague to help them learn and grow in technical tasks. Managed a team, coordinated efforts, and ensured projects were delivered on time and within deadlines."
-    },
+    },*/
+export const EXPERIENCE = [
+    
     {
         company: "Nexus Info",
         role: "AI/ML Intern",
