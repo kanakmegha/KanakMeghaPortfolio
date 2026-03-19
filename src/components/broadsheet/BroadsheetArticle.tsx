@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import React from 'react';
+import React from "react";
 
 interface BroadsheetArticleProps {
   title: string;
@@ -11,81 +11,117 @@ interface BroadsheetArticleProps {
   language?: string;
 }
 
-export const BroadsheetArticle: React.FC<BroadsheetArticleProps> = ({ title, description, url, tag, isFeatured, language }) => {
-  // Logic to extract technologies from description or tag
-  const getTechTags = () => {
-    const techMap: Record<string, string[]> = {
-      'next.js': ['Next.js', 'React'],
-      'react': ['React', 'Tailwind'],
-      'python': ['Python'],
-      'llama': ['Llama 3', 'GenAI'],
-      'ml': ['ML'],
-      'deep learning': ['Deep Learning', 'PyTorch'],
-      'ai': ['AI'],
-      'software': ['Software'],
-    };
-    
-    const tags: string[] = [];
-    const text = (description || '').toLowerCase();
-    
-    Object.keys(techMap).forEach(key => {
-      if (text.includes(key)) tags.push(...techMap[key]);
-    });
-    
-    const uniqueTags = Array.from(new Set(tags)).slice(0, 3);
-    return uniqueTags.length > 0 ? uniqueTags : [tag || 'Project'];
+export const BroadsheetArticle: React.FC<BroadsheetArticleProps> = (
+  { title, description, url, tag, isFeatured, language },
+) => {
+  // Logic to extract technologies from description or tag - CRO Improvement: More robust matching
+  const techMap: Record<string, string> = {
+    "next.js": "Next.js",
+    "react": "React",
+    "python": "Python",
+    "llama": "Llama 3",
+    "rag": "RAG",
+    "ml": "ML",
+    "tensorflow": "TensorFlow",
+    "pytorch": "PyTorch",
+    "nlp": "NLP",
+    "cv": "CV",
+    "genai": "Gen AI",
+    "typescript": "TypeScript",
   };
 
+  const extractedTech = Object.keys(techMap).filter((key) =>
+    (description || "").toLowerCase().includes(key) ||
+    title.toLowerCase().includes(key)
+  ).map((key) => techMap[key]).slice(0, 3);
+
+  const displayTech = extractedTech.length > 0
+    ? extractedTech
+    : [tag || "Software"];
+
   return (
-    <article className={`relative group p-6 mb-8 bg-news-bg border-2 border-dashed border-news-ink/20 shadow-sm hover:-translate-y-1 hover:shadow-lg transition-all duration-300 ${isFeatured ? 'md:col-span-2' : ''}`}>
-      {/* Postage Stamp / Seal in Corner */}
-      <a 
-        href={url} 
-        target="_blank" 
+    <article
+      className={`relative group p-8 mb-12 bg-white border-2 border-news-ink shadow-[8px_8px_0px_0px_rgba(26,26,26,0.05)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all duration-300 ${
+        isFeatured ? "md:col-span-2" : ""
+      }`}
+    >
+      {/* GH Link Seal */}
+      <a
+        href={url}
+        target="_blank"
         rel="noopener noreferrer"
-        className="absolute -top-3 -right-3 w-16 h-16 bg-[#B22222] text-white flex flex-col items-center justify-center p-1 border-2 border-white shadow-md transform rotate-12 hover:rotate-0 transition-transform cursor-pointer overflow-hidden group-hover:bg-news-ink"
+        className="absolute -top-4 -right-4 w-20 h-20 bg-news-accent text-white flex flex-col items-center justify-center p-1 border-4 border-white shadow-xl transform rotate-6 hover:rotate-0 transition-transform cursor-pointer overflow-hidden z-10"
       >
         <div className="border border-white/30 w-full h-full flex flex-col items-center justify-center border-dashed">
-          <span className="text-[6px] font-black uppercase tracking-tighter mb-1">GH-SOURCE</span>
-          <span className="text-[8px] font-black leading-none uppercase">VERIFIED</span>
-          <span className="text-[6px] font-serif italic mt-1 font-bold">2026</span>
+          <span className="text-[7px] font-black uppercase tracking-tighter mb-1">
+            SOURCE
+          </span>
+          <span className="text-[10px] font-black leading-none uppercase">
+            GITHUB
+          </span>
         </div>
       </a>
 
-      <h3 className={`font-serif font-bold text-news-ink leading-tight mb-2 pr-12 ${isFeatured ? 'text-4xl md:text-5xl' : 'text-2xl md:text-3xl'}`}>
-        <a href={url} target="_blank" rel="noopener noreferrer" className="hover:text-news-accent transition-colors">
-          {title.replace(/-/g, ' ')}
+      {/* Categories / Tech Sub-headline */}
+      <div className="flex flex-wrap gap-2 mb-4">
+        {displayTech.map((tech) => (
+          <span
+            key={tech}
+            className="bg-news-ink text-white text-[9px] font-black px-2 py-1 uppercase tracking-widest"
+          >
+            {tech}
+          </span>
+        ))}
+      </div>
+
+      <h3
+        className={`font-serif font-black text-news-ink leading-[1.1] mb-6 pr-12 group-hover:text-news-accent transition-colors ${
+          isFeatured ? "text-5xl md:text-6xl" : "text-3xl md:text-4xl"
+        }`}
+      >
+        <a
+          href={url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="block"
+        >
+          {title.replace(/-/g, " ")}
         </a>
       </h3>
 
       {language && (
-        <div className="flex items-center gap-2 mb-4">
-          <span className="inline-block bg-yellow-200 text-news-ink text-[10px] font-black px-2 py-0.5 uppercase tracking-widest shadow-sm -rotate-1">
-            {language}
+        <div className="flex items-center gap-2 mb-6">
+          <span className="inline-block bg-yellow-200 text-news-ink text-[10px] font-black px-2 py-0.5 uppercase tracking-widest -rotate-1 shadow-sm">
+            Primary: {language}
           </span>
-          <span className="text-[10px] font-serif italic text-news-ink/40">Official Posting</span>
+          <span className="text-[9px] font-sans font-black uppercase tracking-widest text-news-ink/30 italic">
+            Ref: 0-42-X
+          </span>
         </div>
       )}
-      
-      <p className={`font-inter text-news-ink/80 text-justify leading-relaxed mb-6 line-clamp-3 ${isFeatured ? 'line-clamp-none text-lg' : 'text-base'}`}>
-        {description || "A technical artifact cataloged for public review, demonstrating verified software engineering patterns and production-ready implementation."}
+
+      <p
+        className={`font-inter text-news-ink/80 text-justify leading-relaxed mb-8 indent-8 ${
+          isFeatured ? "text-lg" : "text-base line-clamp-4"
+        }`}
+      >
+        {description ||
+          "A high-performance technical artifact demonstrating advanced software patterns, verified implementation, and production-ready architectural decisions for modern digital landscapes."}
       </p>
-      
-      <div className="flex justify-between items-center border-t border-dashed border-news-ink/10 pt-4">
-        <a 
-          href={url} 
-          target="_blank" 
+
+      <div className="flex justify-between items-center border-t-2 border-news-ink pt-6">
+        <a
+          href={url}
+          target="_blank"
           rel="noopener noreferrer"
-          className="font-serif font-black uppercase text-[10px] tracking-widest text-news-ink hover:underline transition-all"
+          className="font-serif font-black uppercase text-[11px] tracking-[0.2em] text-news-ink hover:text-news-accent transition-all flex items-center gap-2"
         >
-          View Full Artifact &rarr;
+          Inspect Artifact <span className="text-lg">&rarr;</span>
         </a>
-        
-        {tag && (
-          <span className="text-[10px] font-sans font-black bg-news-ink/5 px-2 py-1 uppercase tracking-tighter text-news-ink/60">
-            CAT: {tag}
-          </span>
-        )}
+
+        <div className="text-[9px] font-sans font-black text-news-ink/20 uppercase tracking-[0.3em] hidden sm:block">
+          Bureau Classification: TOP SECRET
+        </div>
       </div>
     </article>
   );

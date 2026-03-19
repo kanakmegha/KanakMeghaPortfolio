@@ -122,7 +122,7 @@
   }
 
   .animate-ticker {
-    animation: ticker 30s linear infinite;
+    animation: ticker 60s linear infinite;
   }
 
   @keyframes ticker {
@@ -133,6 +133,14 @@
     100% {
       transform: translateX(-50%);
     }
+  }
+
+  .lead-in {
+    @apply font-sans font-black uppercase text-[10px] tracking-widest text-news-accent mb-2 block;
+  }
+
+  .drop-cap::first-letter {
+    @apply float-left text-6xl font-black mr-3 leading-[0.8] text-news-ink;
   }
 
   .pipe-nav {
